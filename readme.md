@@ -44,9 +44,9 @@ var gulp = require('gulp'),
 
 var app = {
     appName: "gcks-heatmap",
-    lessPath: "./app/less/",
-    jsPath: "./app/js/",
-    imagePath: "./app/images/",
+    lessPath: "./src/less/",
+    jsPath: "./src/js/",
+    imagePath: "./src/images/",
     binPath: "./bin/"
 };
 
@@ -59,6 +59,7 @@ gulp.task('lessToCssAndMin', function () {
         .pipe(rename(function (path) {
             path.basename = app.appName + ".min";
         }))
+        .pipe(connect.reload())
         .pipe(gulp.dest(app.binPath + 'css'));
 });
 
@@ -76,10 +77,16 @@ gulp.task('jsMin', function () {
         .pipe(gulp.dest(app.binPath + 'js'));
 });
 
+gulp.task('libCopy', function () {
+    gulp.src([app.jsPath + 'lib/*.js'])
+        .pipe(connect.reload())
+        .pipe(gulp.dest(app.binPath + 'js/lib'));
+});
+
 var icon="icon-1.png";
 
 gulp.task('imagesMin', function () {
-    return gulp.src('./app/images/icon-*/*.png')//需要合并的图片地址
+    return gulp.src('./src/images/icon-*/*.png')//需要合并的图片地址
         .pipe(spritesmith({
             imgName: icon,//保存合并后图片的地址
             cssName: '../css/icon.css',//保存合并后对于css样式的地址
@@ -114,14 +121,18 @@ gulp.task('connect', function () {
 });
 
 gulp.task('html', function () {
-    gulp.src('./app/*.html')
+    gulp.src('./src/*.html')
         .pipe(connect.reload())
         .pipe(gulp.dest(app.binPath));
 });
 
 //创建watch任务去检测html文件,其定义了当html改动之后，去调用一个Gulp的Task
 gulp.task('htmlWatch', function () {
-    gulp.watch(['./app/*.html'], ['html']);
+    gulp.watch(['./src/*.html'], ['html']);
+});
+
+gulp.task('libWatch', function () {
+    gulp.watch([app.jsPath + 'lib/*.js'], ['libCopy']);
 });
 
 gulp.task('lessWatch', function () {
@@ -133,7 +144,6 @@ gulp.task('jsWatch', function () {
 });
 
 //运行Gulp时，默认的Task
-gulp.task('default', ['connect', 'htmlWatch', 'lessWatch', 'jsWatch']);
-
+gulp.task('default', ['connect', 'htmlWatch', 'lessWatch', 'jsWatch','libWatch']);
 ```
 

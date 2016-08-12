@@ -1,3 +1,34 @@
+#autowebapp
+
+>前端自动化,工程化模板
+
+[TOC]
+
+## 主要技术
+
+- **nodejs** 
+- **npm**  [官网](https://www.npmjs.com/) 查找各种库很方便
+- **cnpm** 淘宝开发的npm镜像 
+- **bower** 包管理工具 基本用法 `bower install jquery --save` `bower list` `bower update`
+- **gulp**  自动化发布 `cnpm install gulp` `gulp task` 运行gulp任务
+
+## 主要能力
+
+- less 转成css ,打包css ,合并多个css文件并压缩
+- 模块化编程的js文件打包合并和压缩
+- 调试自动刷新页面
+- 图片合并成雪碧图,并自动生成css 自己调用相应的class 
+
+## 使用方法
+
+`git clone https://github.com/lihongbin100/autowebapp.git`
+
+## 重要文件
+
+gulpfile.js
+
+``` javascript
+
 //引入插件
 
 var gulp = require('gulp'),
@@ -103,3 +134,6 @@ gulp.task('jsWatch', function () {
 
 //运行Gulp时，默认的Task
 gulp.task('default', ['connect', 'htmlWatch', 'lessWatch', 'jsWatch']);
+
+```
+
